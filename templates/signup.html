@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CallOutApp - Signup</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles.css') }}">
+</head>
+<body>
+<form action="/signup" method="post">
+    <span>{{ error|safe }}</span>
+    Name:<br>
+    <input type="text" name="name"><br>
+    Phone Number:<br>
+    <input type="text" name="phone"><br>
+    Email:<br>
+    <input type="text" name="email"><br>
+    Password:<br>
+    <input type="password" name="password"><br>
+    Password Again:<br>
+    <input type="password" name="password2"><br>
+    <br>
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>
