@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, render_template, request, redirect, session, flash, json
+from flask_cors import CORS, cross_origin
 import re
 import gspread
 from gspread.exceptions import CellNotFound, APIError
@@ -9,13 +10,13 @@ import requests_toolbelt.adapters.appengine
 import json
 import time
 from twilio.rest import Client
-from twilio.twiml.messaging_response import MessagingResponse
-from twilio.twiml.voice_response import VoiceResponse, Gather
 
 requests_toolbelt.adapters.appengine.monkeypatch()
 
 app = Flask(__name__)
 app.secret_key = '12sdfJHBKBb kdf894423nfmldnJKBKNSFMd'
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 account_sid = 'AC107bdb8d0c51fe9b1106818540ebce01'
 auth_token = 'f5bdb8d6fbb3d5e8afbfee61b31f30f7'
@@ -45,8 +46,12 @@ def makecall(phone, password, calltext):
             row = False
         if row is not False:
             phonemsg = UD.cell(row, 5, value_render_option='FORMULA').value
-            phoner(phone, phonemsg)
-            return "call started"
+            call = client.calls.create(
+                url='https://calloutapp-229103.appspot.com/twilio',
+                to='+1{}'.format(str(phone)),
+                from_='+15172450912'
+            )
+            return call.sid
         else:
             return "Unable to find that phone number in the database. "
     elif calltext == "text":
@@ -67,22 +72,18 @@ def makecall(phone, password, calltext):
 def makecompcall(phone, password, calltext, cstmsg, cstdelay):
     if calltext == "phone":
         time.sleep(cstdelay)
-        phoner(phone, cstmsg)
-        return "call started"
+        call = client.calls.create(
+            url='https://calloutapp-229103.appspot.com/twilio',
+            to='+1{}'.format(str(phone)),
+            from_='+15172450912'
+        )
+        return call.sid
     elif calltext == "text":
         time.sleep(cstdelay)
         texter(phone, cstmsg)
         return "text sent"
     else:
         return "There was an error deciding if you wanted to call or text, please try again"
-
-
-def phoner(phone, msg):
-    call = client.calls.create(
-        url='https://https://calloutapp-229103.appspot.com/twilio/{}'.format(msg),
-        to="+1{}".format(str(phone)),
-        from_='+15172450912'
-    )
 
 
 def texter(phone, msg):
@@ -195,46 +196,19 @@ def dashboard():
     elif request.method == "POST":
         return render_template("dashboard.html")
 
-    @app.route('/call', methods=['POST'])
-    def call():
-        if request.method == "POST":
-            if 'phone' in session and 'password' in session:
-                phone = session['phone']
-                password = session['password']
-                if dbcheck(phone, password):
-                    json = request.get_json()
-                    dict2 = json.loads(json)
-                    try:
-                        calltext = dict2['calltext']
-                    except:
-                        flash("The call the the server was missing data. Please try logging out and back in again")
-                        return redirect("dashboard")
-                    try:
-                        cstmsg = dict['cstmsg']
-                        cstdelay = dict['cstdelay']
-                    except:
-                        cstmsg = False
-                        cstdelay = False
-                    if phone and password and calltext:
-                        if cstmsg and cstdelay:
-                            response = makecompcall(phone, password, calltext, cstmsg, cstdelay)
-                            return response
-                        else:
-                            response = makecall(phone, password, calltext)
-                            return response
-                else:
-                    flash('There was an error logging you in. Please log out and try again.')
-                    return redirect("dashboard")
-            else:
-                json = request.get_json()
-                dict = json.loads(json)
+
+@app.route('/call', methods=['POST'])
+def call():
+    if request.method == "POST":
+        if 'phone' in session and 'password' in session:
+            phone = session['phone']
+            password = session['password']
+            if dbcheck(phone, password):
+                dict = request.json
                 try:
-                    phone = dict['phone']
-                    password = dict['password']
                     calltext = dict['calltext']
                 except:
-                    flash("The call the the server was missing data. Please try logging out and back in again")
-                    return redirect("dashboard")
+                    return "The call the the server was missing data. Please try logging out and back in again"
                 try:
                     cstmsg = dict['cstmsg']
                     cstdelay = dict['cstdelay']
@@ -243,22 +217,50 @@ def dashboard():
                     cstdelay = False
                 if phone and password and calltext:
                     if cstmsg and cstdelay:
-                        if dbcheck(phone, password):
-                            response = makecompcall(phone, password, calltext, cstmsg, cstdelay)
-                            return response
-                        else:
-                            return "Incorrect phone number or password"
+                        response = makecompcall(phone, password, calltext, cstmsg, cstdelay)
+                        return response
                     else:
-                        if dbcheck(phone, password):
-                            response = makecall(phone, password, calltext)
-                            return response
-                        else:
-                            return "Incorrect phone number or password"
+                        response = makecall(phone, password, calltext)
+                        return response
+            else:
+                return 'There was an error logging you in. Please log out and try again.'
+        else:
+            dict = request.json
+            try:
+                phone = dict['phone']
+                password = dict['password']
+                calltext = dict['calltext']
+            except:
+                return "The call the the server was missing data. Please try logging out and back in again"
+            try:
+                cstmsg = dict['cstmsg']
+                cstdelay = dict['cstdelay']
+            except:
+                cstmsg = False
+                cstdelay = False
+            if phone and password and calltext:
+                if cstmsg and cstdelay:
+                    if dbcheck(phone, password):
+                        response = makecompcall(phone, password, calltext, cstmsg, cstdelay)
+                        return response
+                    else:
+                        return "Incorrect phone number or password"
+                else:
+                    if dbcheck(phone, password):
+                        response = makecall(phone, password, calltext)
+                        return response
+                    else:
+                        return "Incorrect phone number or password"
+            else:
+                return "Error parsing json"
+    else:
+        return "Somehow it is and isnt Post"
 
 
-@app.route('/twilio/<msg>')
-def callpage(msg):
-    return render_template('twilio.xml', message=msg)
+@app.route('/twilio', methods=['POST', 'GET'])
+@cross_origin()
+def callpage():
+    return render_template('twilio.xml', message="This is a test of the Call Out App's automated calling")
 
 
 if __name__ == '__main__':

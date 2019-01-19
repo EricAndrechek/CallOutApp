@@ -9,3 +9,4 @@ requests-toolbelt
 json
 time
 twilio
+flask_cors
