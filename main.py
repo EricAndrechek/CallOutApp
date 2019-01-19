@@ -1,12 +1,106 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, flash
 import re
+import gspread
+from gspread.exceptions import CellNotFound, APIError
+from oauth2client.service_account import ServiceAccountCredentials
+import socket
+import requests
+import requests_toolbelt.adapters.appengine
+import json
+import time
+from twilio.rest import Client
+from twilio.twiml.messaging_response import MessagingResponse
+from twilio.twiml.voice_response import VoiceResponse, Gather
+
+requests_toolbelt.adapters.appengine.monkeypatch()
 
 app = Flask(__name__)
+app.secret_key = '12sdfJHBKBb kdf894423nfmldnJKBKNSFMd'
+
+account_sid = 'AC107bdb8d0c51fe9b1106818540ebce01'
+auth_token = 'f5bdb8d6fbb3d5e8afbfee61b31f30f7'
+client = Client(account_sid, auth_token)
 
 
 def dbcheck(phone, password):
-    return True
-    # check for phone and password in database
+    gc.login()
+    try:
+        row = UD.find(phone).row
+    except CellNotFound:
+        row = False
+    if row is not False:
+        if password == UD.cell(row, 4, value_render_option='FORMULA').value:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+
+def makecall(phone, password, calltext):
+    if calltext == "call":
+        try:
+            row = UD.find(phone).row
+        except CellNotFound:
+            row = False
+        if row is not False:
+            phonemsg = UD.cell(row, 5, value_render_option='FORMULA').value
+            phoner(phone, phonemsg)
+            return "call started"
+        else:
+            return "Unable to find that phone number in the database. "
+    elif calltext == "text":
+        try:
+            row = UD.find(phone).row
+        except CellNotFound:
+            row = False
+        if row is not False:
+            textmsg = UD.cell(row, 6, value_render_option='FORMULA').value
+            texter(phone, textmsg)
+            return "text sent"
+        else:
+            return "Unable to find that phone number in the database."
+    else:
+        return "There was an error deciding if you wanted to call or text, please try again"
+
+
+def makecompcall(phone, password, calltext, cstmsg, cstdelay):
+    if calltext == "phone":
+        time.sleep(cstdelay)
+        phoner(phone, cstmsg)
+        return "call started"
+    elif calltext == "text":
+        time.sleep(cstdelay)
+        texter(phone, cstmsg)
+        return "text sent"
+    else:
+        return "There was an error deciding if you wanted to call or text, please try again"
+
+
+def phoner(phone, msg):
+    call = client.calls.create(
+        url='https://https://calloutapp-229103.appspot.com/twilio/{}'.format(msg),
+        to="+1{}".format(str(phone)),
+        from_='+15172450912'
+    )
+
+
+def texter(phone, msg):
+    message = client.messages.create(
+        body="{}".format(str(msg)),
+        from_='+15172450912',
+        to='{}'.format(str(phone)))
+
+
+scope = ['https://spreadsheets.google.com/feeds',
+         'https://www.googleapis.com/auth/spreadsheets',
+         'https://www.googleapis.com/auth/drive']
+
+credentials = ServiceAccountCredentials.from_json_keyfile_name('calloutapp-229103.json', scope)
+
+gc = gspread.authorize(credentials)
+
+UD = gc.open_by_key('1PdQvaR-qiPLL2zYpMNw-XVg4zWUtjYcOO8fDb0nlah4').worksheet('Users')
 
 
 @app.route('/')
@@ -24,6 +118,8 @@ def login():
         # check for phone in database and it it exists check if password matches
         account = dbcheck(phone, password)
         if account:  # if account exists is True, else False
+            session["phone"] = phone
+            session["password"] = password
             return redirect("dashboard")
         else:
             return render_template("login.html", error="Incorrect username or password<br>")
@@ -49,7 +145,27 @@ def signup():
                         if phoneregex.match(phone) is not None:
                             passwordregex = re.compile(r'^[A-Za-z0-9!@#$%_=+.?-]{8,}$')
                             if passwordregex.match(password) is not None:
-                                return "Test"
+                                gc.login()
+                                try:
+                                    row = UD.find(phone).row
+                                except CellNotFound:
+                                    row = False
+                                if row is False:
+                                    gc.login()
+                                    try:
+                                        row2 = UD.find(email).row
+                                    except CellNotFound:
+                                        row2 = False
+                                    if row2 is False:
+                                        new_user = [name, phone, email, password]
+                                        UD.append_row(new_user, value_input_option='RAW')
+                                        session['phone'] = phone
+                                        session['password'] = password
+                                        return redirect("dashboard")
+                                    else:
+                                        return render_template("signup.html", error="That email is already taken<br>")
+                                else:
+                                    return render_template("signup.html", error="That phone number is already taken<br>")
                             else:
                                 return render_template("signup.html", error="Your password includes characters not allowed or is not at least 8 characters<br>")
                         else:
@@ -67,9 +183,82 @@ def signup():
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if request.method == "GET":
-        return redirect('login')
+        if 'phone' in session and 'password' in session:
+            phone = session['phone']
+            password = session['password']
+            if dbcheck(phone, password):
+                return render_template("dashboard.html", phone=phone, password=password)
+            else:
+                return redirect("login")
+        else:
+            return redirect("login")
     elif request.method == "POST":
         return render_template("dashboard.html")
+
+    @app.route('/call', methods=['POST'])
+    def call():
+        if request.method == "POST":
+            if 'phone' in session and 'password' in session:
+                phone = session['phone']
+                password = session['password']
+                if dbcheck(phone, password):
+                    json = request.get_json()
+                    dict2 = json.loads(json)
+                    try:
+                        calltext = dict2['calltext']
+                    except:
+                        flash("The call the the server was missing data. Please try logging out and back in again")
+                        return redirect("dashboard")
+                    try:
+                        cstmsg = dict['cstmsg']
+                        cstdelay = dict['cstdelay']
+                    except:
+                        cstmsg = False
+                        cstdelay = False
+                    if phone and password and calltext:
+                        if cstmsg and cstdelay:
+                            response = makecompcall(phone, password, calltext, cstmsg, cstdelay)
+                            return response
+                        else:
+                            response = makecall(phone, password, calltext)
+                            return response
+                else:
+                    flash('There was an error logging you in. Please log out and try again.')
+                    return redirect("dashboard")
+            else:
+                json = request.get_json()
+                dict = json.loads(json)
+                try:
+                    phone = dict['phone']
+                    password = dict['password']
+                    calltext = dict['calltext']
+                except:
+                    flash("The call the the server was missing data. Please try logging out and back in again")
+                    return redirect("dashboard")
+                try:
+                    cstmsg = dict['cstmsg']
+                    cstdelay = dict['cstdelay']
+                except:
+                    cstmsg = False
+                    cstdelay = False
+                if phone and password and calltext:
+                    if cstmsg and cstdelay:
+                        if dbcheck(phone, password):
+                            response = makecompcall(phone, password, calltext, cstmsg, cstdelay)
+                            return response
+                        else:
+                            return "Incorrect phone number or password"
+                    else:
+                        if dbcheck(phone, password):
+                            response = makecall(phone, password, calltext)
+                            return response
+                        else:
+                            return "Incorrect phone number or password"
+
+
+@app.route('/twilio/<msg>')
+def callpage(msg):
+    return render_template('twilio.xml', message=msg)
 
 
 if __name__ == '__main__':

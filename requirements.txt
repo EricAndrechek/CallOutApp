@@ -1,0 +1,11 @@
+Flask==1.0.2
+Werkzeug<0.13.0,>=0.12.0
+re
+oauth2client==2.0.2
+gspread
+socket
+requests
+requests-toolbelt
+json
+time
+twilio

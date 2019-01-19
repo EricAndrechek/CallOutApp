@@ -4,12 +4,36 @@
     <meta charset="UTF-8">
     <title>CallOutApp - Dashboard</title>
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script>
+
+    </script>
 </head>
 <body>
-<p>
-    Phone = {{ phone }}
-    <br>
-    Password = {{ password }}
-</p>
+<div class="desktop-header">
+    <img class="himg" src="/static/CallOutLogo.png">
+    <div class="right">
+        <span class="h">HOME&nbsp;&nbsp;</span>
+        <span class="h">DASHBOARD&nbsp;&nbsp;</span>
+        <span class="h">ACCOUNT&nbsp;&nbsp;</span>
+        <span class="h">ABOUT&nbsp;&nbsp;</span>
+        <span class="h">FAQ&nbsp;&nbsp;</span>
+        <span class="h">CONTACT&nbsp;&nbsp;</span>
+    </div>
+</div>
+<div class="mobile-header">
+    <img class="himg" src="/static/CallOutLogo.png">
+    <div style="color: white; font-size: 40px; float: right; margin-right: 20px;" onclick="if(document.getElementById('dropdown').style.display === 'none') { document.getElementById('dropdown').style.display = 'block'; } else { document.getElementById('dropdown').style.display = 'none'; }">|||</div>
+    <div style="display: none; width: 100%; height: 100vh; background-color: #000066; text-align: center; color: white;" id="dropdown">
+        <span class="h">HOME</span>
+        <span class="h">DASHBOARD</span>
+        <span class="h">ACCOUNT</span>
+        <span class="h">ABOUT</span>
+        <span class="h">FAQ</span>
+        <span class="h">CONTACT</span>
+    </div>
+</div>
+{{ error|safe }}
 </body>
 </html>
