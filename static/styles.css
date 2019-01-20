@@ -14,7 +14,8 @@ body {
     background-image: url('/static/2girls1guy.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-position: center;
+    background-position-x: center;
+    background-position-y: top;
     background-size: 100% auto;
 }
 
