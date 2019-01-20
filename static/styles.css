@@ -49,7 +49,7 @@ body {
 
 @media (min-width: 812px) {
     .desktop-header {
-        background-color: #dbdbdb;
+        background-color: #000066;
         width: 100%;
         padding: 10px;
         margin: 0;
@@ -72,7 +72,7 @@ body {
 
     .left {
         float: left;
-        margin-left: 10vh;
+        margin-left: 16vh;
         font-size: 30px;
     }
 
