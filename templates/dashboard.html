@@ -7,33 +7,62 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <script>
+        function call() {
+            var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+            xmlhttp.open("POST", "/call");
+            xmlhttp.setRequestHeader("Content-Type", "application/json");
+            xmlhttp.send(JSON.stringify({calltext:"call"}));
+        }
 
+        function text() {
+            var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+            xmlhttp.open("POST", "/call");
+            xmlhttp.setRequestHeader("Content-Type", "application/json");
+            xmlhttp.send(JSON.stringify({calltext:"text"}));
+        }
+
+        function misc(calltext, cstmsg, cstdelay) {
+            var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+            xmlhttp.open("POST", "/call");
+            xmlhttp.setRequestHeader("Content-Type", "application/json");
+            xmlhttp.send(JSON.stringify({'calltext':calltext, 'cstmsg':cstmsg, 'cstdelay':cstdelay}));
+        }
     </script>
 </head>
 <body>
 <div class="desktop-header">
     <img class="himg" src="/static/CallOutLogo.png">
     <div class="right">
-        <span class="h">HOME&nbsp;&nbsp;</span>
-        <span class="h">DASHBOARD&nbsp;&nbsp;</span>
-        <span class="h">ACCOUNT&nbsp;&nbsp;</span>
-        <span class="h">ABOUT&nbsp;&nbsp;</span>
-        <span class="h">FAQ&nbsp;&nbsp;</span>
-        <span class="h">CONTACT&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/">HOME</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/dashboard">DASHBOARD</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/about">ABOUT</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/FAQ">FAQ</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/contact">CONTACT</a>&nbsp;&nbsp;</span>
     </div>
 </div>
 <div class="mobile-header">
     <img class="himg" src="/static/CallOutLogo.png">
     <div style="color: white; font-size: 40px; float: right; margin-right: 20px;" onclick="if(document.getElementById('dropdown').style.display === 'none') { document.getElementById('dropdown').style.display = 'block'; } else { document.getElementById('dropdown').style.display = 'none'; }">|||</div>
     <div style="display: none; width: 100%; height: 100vh; background-color: #000066; text-align: center; color: white;" id="dropdown">
-        <span class="h">HOME</span>
-        <span class="h">DASHBOARD</span>
-        <span class="h">ACCOUNT</span>
-        <span class="h">ABOUT</span>
-        <span class="h">FAQ</span>
-        <span class="h">CONTACT</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/">HOME</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/dashboard">DASHBOARD</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/about">ABOUT</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/FAQ">FAQ</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/contact">CONTACT</a>&nbsp;&nbsp;</span>
     </div>
 </div>
-{{ error|safe }}
+<div style="height: 16vh; margin: 0; padding: 10px;" class="spacer"></div>
+    {{ error|safe }}
+    <button onclick="call()">Call</button>
+    <br>
+    <button onclick="text()">Text</button>
+    <br>
+    Custom Message:<br>
+    <input id="cstmsg" type="text" name="message"><br>
+    Custom Delay (seconds):<br>
+    <input id="cstdelay" type="number" name="delay"><br>
+    call or text:<br>
+    <input id="calltext" type="phone" name="phone"><br><br>
+    <button onclick="misc(document.getElementById('calltext').value, document.getElementById('cstmsg').value, document.getElementById('cstdelay').value)">Custom</button>
 </body>
 </html>

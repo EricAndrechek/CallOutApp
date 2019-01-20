@@ -14,26 +14,25 @@
 <div class="desktop-header">
     <img class="himg" src="/static/CallOutLogo.png">
     <div class="right">
-        <span class="h">HOME&nbsp;&nbsp;</span>
-        <span class="h">DASHBOARD&nbsp;&nbsp;</span>
-        <span class="h">ACCOUNT&nbsp;&nbsp;</span>
-        <span class="h">ABOUT&nbsp;&nbsp;</span>
-        <span class="h">FAQ&nbsp;&nbsp;</span>
-        <span class="h">CONTACT&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/">HOME</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/dashboard">DASHBOARD</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/about">ABOUT</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/faq">FAQ</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/contact">CONTACT</a>&nbsp;&nbsp;</span>
     </div>
 </div>
 <div class="mobile-header">
     <img class="himg" src="/static/CallOutLogo.png">
     <div style="color: white; font-size: 40px; float: right; margin-right: 20px;" onclick="if(document.getElementById('dropdown').style.display === 'none') { document.getElementById('dropdown').style.display = 'block'; } else { document.getElementById('dropdown').style.display = 'none'; }">|||</div>
     <div style="display: none; width: 100%; height: 100vh; background-color: #000066; text-align: center; color: white;" id="dropdown">
-        <span class="h">HOME</span>
-        <span class="h">DASHBOARD</span>
-        <span class="h">ACCOUNT</span>
-        <span class="h">ABOUT</span>
-        <span class="h">FAQ</span>
-        <span class="h">CONTACT</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/">HOME</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/dashboard">DASHBOARD</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/about">ABOUT</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/faq">FAQ</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/contact">CONTACT</a>&nbsp;&nbsp;</span>
     </div>
 </div>
+<div style="height: 15vh; margin: 0; padding: 10px;" class="spacer"></div>
 <form action="/login" method="post">
     <span>{{ error|safe }}</span>
     Phone Number:<br>
@@ -42,5 +41,6 @@
     <input type="password" name="password"><br><br>
     <input type="submit" value="Submit">
 </form>
+<a href="/signup">Don't have an account? Signup here</a>
 </body>
 </html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CallOutApp</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script>
+
+    </script>
+</head>
+<body>
+<div class="desktop-header">
+    <img class="himg" src="/static/CallOutLogo.png">
+    <div class="right">
+        <span class="h"><a style="color: white; text-decoration: none;" href="/">HOME</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/dashboard">DASHBOARD</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/about">ABOUT</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/faq">FAQ</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/contact">CONTACT</a>&nbsp;&nbsp;</span>
+    </div>
+</div>
+<div class="mobile-header">
+    <img class="himg" src="/static/CallOutLogo.png">
+    <div style="color: white; font-size: 40px; float: right; margin-right: 20px;" onclick="if(document.getElementById('dropdown').style.display === 'none') { document.getElementById('dropdown').style.display = 'block'; } else { document.getElementById('dropdown').style.display = 'none'; }">|||</div>
+    <div style="display: none; width: 100%; height: 100vh; background-color: #000066; text-align: center; color: white;" id="dropdown">
+        <span class="h"><a style="color: white; text-decoration: none;" href="/">HOME</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/dashboard">DASHBOARD</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/about">ABOUT</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/faq">FAQ</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/contact">CONTACT</a>&nbsp;&nbsp;</span>
+    </div>
+</div>
+<div style="height: 15vh; margin: 0; padding: 10px;" class="spacer"></div>
+<h1>About Us</h1>
+<p>
+    At CallOut, we know that people’s lives aren’t movies; not every
+    moment is perfectly choreographed and conveniently scripted, and
+    oftentimes interactions are stiff and unnatural. That’s why we’re
+    committed to making every day a just bit easier by giving people a
+    tool to avoid the awkward interactions that can turn elegant occasions
+    into embarrassing ones. Our goal as a company is to ensure that our
+    clients are never afraid of any situation and can savor the great
+    moments in life, while cutting out the ones that aren’t.
+</p>
+</body>
+</html>

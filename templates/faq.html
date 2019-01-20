@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CallOutApp - faq</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script>
+
+    </script>
+</head>
+<body>
+<div class="desktop-header">
+    <img class="himg" src="/static/CallOutLogo.png">
+    <div class="right">
+        <span class="h"><a style="color: white; text-decoration: none;" href="/">HOME</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/dashboard">DASHBOARD</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/about">ABOUT</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/faq">FAQ</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/contact">CONTACT</a>&nbsp;&nbsp;</span>
+    </div>
+</div>
+<div class="mobile-header">
+    <img class="himg" src="/static/CallOutLogo.png">
+    <div style="color: white; font-size: 40px; float: right; margin-right: 20px;" onclick="if(document.getElementById('dropdown').style.display === 'none') { document.getElementById('dropdown').style.display = 'block'; } else { document.getElementById('dropdown').style.display = 'none'; }">|||</div>
+    <div style="display: none; width: 100%; height: 100vh; background-color: #000066; text-align: center; color: white;" id="dropdown">
+        <span class="h"><a style="color: white; text-decoration: none;" href="/">HOME</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/dashboard">DASHBOARD</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/about">ABOUT</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/faq">FAQ</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/contact">CONTACT</a>&nbsp;&nbsp;</span>
+    </div>
+</div>
+<div style="height: 15vh; margin: 0; padding: 10px;" class="spacer"></div>
+<h1>Frequently Asked Questions</h1>
+<p>
+    Q: Does CallOut share my information? Will my info stay private?
+    <br>
+    A: Yep! CallOut doesn’t sell any of your information, or share it in
+    any other way—the safety of our customers is our #1 priority, and we
+    along with that comes a value for your privacy.
+    <br>
+    <br>
+    <br>
+    Q: Is CallOut free?
+    <br>
+    A: CallOut is a non-profit organization, and is thus 100% free of
+    charge; we exist solely to make your lives better.
+    <br>
+    <br>
+    Q: What’s the point of CallOut if I can just dial 911?
+    <br>
+    A: Not every situation is extreme enough to warrant a call to the
+    police. That’s why CallOut is mainly intended to cater to situations
+    where you’re not in any immediate danger. By doing this, we give you a
+    much easier solution to milder issues and make sure the authorities
+    are free to respond to any real emergencies.
+</p>
+</body>
+</html>

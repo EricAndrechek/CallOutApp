@@ -10,6 +10,7 @@ import requests_toolbelt.adapters.appengine
 import json
 import time
 from twilio.rest import Client
+import urllib
 
 requests_toolbelt.adapters.appengine.monkeypatch()
 
@@ -46,8 +47,9 @@ def makecall(phone, password, calltext):
             row = False
         if row is not False:
             phonemsg = UD.cell(row, 5, value_render_option='FORMULA').value
+            msg = urllib.quote(phonemsg)
             call = client.calls.create(
-                url='https://calloutapp-229103.appspot.com/twilio',
+                url='https://calloutapp-229103.appspot.com/twilio/{}'.format(msg),
                 to='+1{}'.format(str(phone)),
                 from_='+15172450912'
             )
@@ -70,10 +72,11 @@ def makecall(phone, password, calltext):
 
 
 def makecompcall(phone, password, calltext, cstmsg, cstdelay):
-    if calltext == "phone":
-        time.sleep(cstdelay)
+    if calltext == "call":
+        time.sleep(int(cstdelay))
+        msg = urllib.quote(cstmsg)
         call = client.calls.create(
-            url='https://calloutapp-229103.appspot.com/twilio',
+            url='https://calloutapp-229103.appspot.com/twilio/{}'.format(msg),
             to='+1{}'.format(str(phone)),
             from_='+15172450912'
         )
@@ -257,10 +260,25 @@ def call():
         return "Somehow it is and isnt Post"
 
 
-@app.route('/twilio', methods=['POST', 'GET'])
+@app.route('/twilio/<msg>', methods=['POST', 'GET'])
 @cross_origin()
-def callpage():
-    return render_template('twilio.xml', message="This is a test of the Call Out App's automated calling")
+def callpage(msg):
+    return render_template('twilio.xml', message=urllib.unquote(msg))
+
+
+@app.route('/about')
+def about():
+    return render_template("about.html")
+
+
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
+
+
+@app.route('/faq')
+def faq():
+    return render_template("faq.html")
 
 
 if __name__ == '__main__':

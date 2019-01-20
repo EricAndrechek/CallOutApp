@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CallOutApp</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script>
+
+    </script>
+</head>
+<body>
+<div class="desktop-header">
+    <img class="himg" src="/static/CallOutLogo.png">
+    <div class="right">
+        <span class="h"><a style="color: white; text-decoration: none;" href="/">HOME</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/dashboard">DASHBOARD</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/about">ABOUT</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/faq">FAQ</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/contact">CONTACT</a>&nbsp;&nbsp;</span>
+    </div>
+</div>
+<div class="mobile-header">
+    <img class="himg" src="/static/CallOutLogo.png">
+    <div style="color: white; font-size: 40px; float: right; margin-right: 20px;" onclick="if(document.getElementById('dropdown').style.display === 'none') { document.getElementById('dropdown').style.display = 'block'; } else { document.getElementById('dropdown').style.display = 'none'; }">|||</div>
+    <div style="display: none; width: 100%; height: 100vh; background-color: #000066; text-align: center; color: white;" id="dropdown">
+        <span class="h"><a style="color: white; text-decoration: none;" href="/">HOME</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/dashboard">DASHBOARD</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/about">ABOUT</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/faq">FAQ</a>&nbsp;&nbsp;</span>
+        <span class="h"><a style="color: white; text-decoration: none;" href="/contact">CONTACT</a>&nbsp;&nbsp;</span>
+    </div>
+</div>
+<div style="height: 15vh; margin: 0; padding: 10px;" class="spacer"></div>
+<h1>Contact</h1>
+<p>
+    Have any questions? Feel free to email or call us and we’ll be happy to help!
+    <br>
+    <br>
+    <br>
+    Email: help@calloutapp.com<sup>*</sup>
+    <br>
+    <br>
+    Phone: 1 (517) 245-0791<sup>*</sup>
+    <br>
+    <br>
+    <br>
+    * = none of these methods of contact are live
+</p>
+</body>
+</html>
