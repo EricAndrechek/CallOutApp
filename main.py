@@ -53,7 +53,7 @@ def makecall(phone, password, calltext):
                 to='+1{}'.format(str(phone)),
                 from_='+15172450912'
             )
-            return call.sid
+            return "call made"
         else:
             return "Unable to find that phone number in the database. "
     elif calltext == "text":
@@ -80,9 +80,9 @@ def makecompcall(phone, password, calltext, cstmsg, cstdelay):
             to='+1{}'.format(str(phone)),
             from_='+15172450912'
         )
-        return call.sid
+        return "call made"
     elif calltext == "text":
-        time.sleep(cstdelay)
+        time.sleep(int(cstdelay))
         texter(phone, cstmsg)
         return "text sent"
     else:

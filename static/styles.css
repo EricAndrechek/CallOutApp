@@ -1,5 +1,5 @@
 body {
-    background-color: #f2f2f2;
+    background-color: #e0e0e0;
     width: 100%;
     overflow-x: hidden;
     padding: 0;
@@ -13,10 +13,12 @@ body {
     overflow: hidden;
     background-image: url('/static/2girls1guy.jpg');
     background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-attachment: scroll;
     background-position-x: center;
     background-position-y: top;
-    background-size: 100% auto;
+    background-size: 100%;
+    vertical-align: middle;
+    text-align: center;
 }
 
 @media screen and (max-width: 812px) {
@@ -47,7 +49,7 @@ body {
 
 @media (min-width: 812px) {
     .desktop-header {
-        background-color: #000066;
+        background-color: #dbdbdb;
         width: 100%;
         padding: 10px;
         margin: 0;
@@ -66,6 +68,12 @@ body {
     .right {
         float: right;
         margin-right: 10px;
+    }
+
+    .left {
+        float: left;
+        margin-left: 10vh;
+        font-size: 30px;
     }
 
     .h {
