@@ -63,6 +63,7 @@ body {
 
     .himg {
         width: 15vh;
+        float: left;
     }
 
     .right {
@@ -72,8 +73,8 @@ body {
 
     .left {
         float: left;
-        margin-left: 16vh;
         font-size: 30px;
+        line-height: 15vh;
     }
 
     .h {
