@@ -11,9 +11,8 @@ body {
     width: 100%;
     height: 70vh;
     overflow: hidden;
+    background-image: url('/static/2girls1guy.jpg')
 }
-
-
 
 @media screen and (max-width: 812px) {
     .desktop-header {
