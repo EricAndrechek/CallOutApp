@@ -197,7 +197,24 @@ def dashboard():
         else:
             return redirect("login")
     elif request.method == "POST":
-        return render_template("dashboard.html")
+        phone = session['phone']
+        password = session['password']
+        pm = request.form.get('phone-message')
+        tm = request.form.get('text-message')
+        if pm is not None and tm is not None:
+            if dbcheck(phone, password):
+                gc.login()
+                try:
+                    row = UD.find(phone).row
+                except CellNotFound:
+                    row = False
+                UD.update_cell(row, 5, pm)
+                UD.update_cell(row, 6, tm)
+                return render_template("dashboard.html", error="Success! Your default messages have been changed.")
+            else:
+                return render_template("dashboard.html", error="Unable to login. PLease log out and try again.")
+        else:
+            return render_template("dashboard.html", error="Unable to get changed data. Please try again later.")
 
 
 @app.route('/call', methods=['POST'])
@@ -279,6 +296,13 @@ def contact():
 @app.route('/faq')
 def faq():
     return render_template("faq.html")
+
+
+@app.route('/logout')
+def logout():
+    session.pop('phone', None)
+    session.pop('password', None)
+    return redirect('login')
 
 
 if __name__ == '__main__':

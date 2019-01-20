@@ -24,10 +24,20 @@
         }
 
         function misc(calltext, cstmsg, cstdelay) {
+            if (calltext != "call" || calltext != "text") {
+                alert("please enter either 'call' or 'text' to determine which you would like to make.")
+            } else {
+                var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+                xmlhttp.open("POST", "/call");
+                xmlhttp.setRequestHeader("Content-Type", "application/json");
+                xmlhttp.send(JSON.stringify({'calltext': calltext, 'cstmsg': cstmsg, 'cstdelay': cstdelay}));
+            }
+        }
+
+        function deleteAllCookies() {
             var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
-            xmlhttp.open("POST", "/call");
-            xmlhttp.setRequestHeader("Content-Type", "application/json");
-            xmlhttp.send(JSON.stringify({'calltext':calltext, 'cstmsg':cstmsg, 'cstdelay':cstdelay}));
+            xmlhttp.open("GET", "/logout");
+            xmlhttp.send();
         }
     </script>
 </head>
@@ -58,16 +68,48 @@
 </div>
 <div style="height: 16vh; margin: 0; padding: 10px;" class="spacer"></div>
     {{ error|safe }}
-    <button onclick="call()">Call</button>
-    <br>
-    <button onclick="text()">Text</button>
-    <br>
-    Custom Message:<br>
-    <input id="cstmsg" type="text" name="message"><br>
-    Custom Delay (seconds):<br>
-    <input id="cstdelay" type="number" name="delay"><br>
-    call or text:<br>
-    <input id="calltext" type="phone" name="phone"><br><br>
-    <button onclick="misc(document.getElementById('calltext').value, document.getElementById('cstmsg').value, document.getElementById('cstdelay').value)">Custom</button>
+    <div style="width: 33%; float: left;">
+        <center>
+            <br>
+            <button style="cursor: pointer; font-size: 20px; width: 75%; height: 10vh; border: 1px solid #9999FF; background-color: #9966CC; border-radius: 15px; box-shadow: 0 10px 15px 0 rgba(0,0,0,0.24);" onclick="call()">Call</button>
+        </center>
+    </div>
+<div style="width: 66%; float: right;">
+    <div style="width: 50%; float: left;">
+        <center>
+            Custom Message:<br>
+            <input id="cstmsg" type="text" name="message"><br>
+            Custom Delay (seconds):<br>
+            <input id="cstdelay" type="number" name="delay"><br>
+            call or text:<br>
+            <input id="calltext" type="phone" name="phone"><br><br>
+            <button style="cursor: pointer; font-size: 20px; width: 75%; height: 10vh; color: white; border: 1px solid #000066; background-color: #000066; border-radius: 15px; box-shadow: 0 10px 15px 0 rgba(0,0,0,0.24);" onclick="misc(document.getElementById('calltext').value, document.getElementById('cstmsg').value, document.getElementById('cstdelay').value)">Custom</button>
+        </center>
+    </div>
+    <div style="width: 50%; float: right;">
+        <center>
+            <br>
+            <button style="cursor: pointer; font-size: 20px; width: 75%; height: 10vh; border: 1px solid #9966CC; background-color: #9999FF; border-radius: 15px; box-shadow: 0 10px 15px 0 rgba(0,0,0,0.24);" onclick="text()">Text</button>
+        </center>
+    </div>
+</div>
+<div style="width: 100%; height: 20vh;"><br><br><br></div>
+<div style="width: 50%; float: left; padding-top: 20vh;">
+    <center>
+<form action="/dashboard" method="post">
+    <span>{{ error|safe }}</span>
+    Default Phone Message:<br>
+    <input type="text" name="phone-message"><br>
+    Default Text Message:<br>
+    <input type="text" name="text-message"><br><br>
+    <input type="submit" style="cursor: pointer; font-size: 20px; width: 20%; height: 10vh; border: 1px solid #9999FF; background-color: #9966CC; border-radius: 15px; box-shadow: 0 10px 15px 0 rgba(0,0,0,0.24);" value="Submit">
+</form>
+    </center>
+</div>
+<div style="width: 50%; float: right; padding-top: 20vh;">
+    <center>
+        <button style="cursor: pointer; font-size: 20px; width: 75%; height: 10vh; border: 1px solid #9966CC; background-color: #9999FF; border-radius: 15px; box-shadow: 0 10px 15px 0 rgba(0,0,0,0.24);" onclick="deleteAllCookies()">Logout</button>
+    </center>
+</div>
 </body>
 </html>

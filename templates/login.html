@@ -38,14 +38,19 @@
     </div>
 </div>
 <div style="height: 15vh; margin: 0; padding: 10px;" class="spacer"></div>
+<center>
+    <br>
+    <br>
 <form action="/login" method="post">
     <span>{{ error|safe }}</span>
     Phone Number:<br>
     <input type="phone" name="phone"><br>
     Password:<br>
     <input type="password" name="password"><br><br>
-    <input type="submit" value="Submit">
+    <input type="submit" style="cursor: pointer; font-size: 20px; width: 20%; height: 10vh; border: 1px solid #9999FF; background-color: #9966CC; border-radius: 15px; box-shadow: 0 10px 15px 0 rgba(0,0,0,0.24);" value="Submit">
 </form>
+    <br>
 <a href="/signup">Don't have an account? Signup here</a>
+</center>
 </body>
 </html>
