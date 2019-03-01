@@ -15,12 +15,12 @@ import urllib
 requests_toolbelt.adapters.appengine.monkeypatch()
 
 app = Flask(__name__)
-app.secret_key = '12sdfJHBKBb kdf894423nfmldnJKBKNSFMd'
+app.secret_key = 'redacted'
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-account_sid = 'AC107bdb8d0c51fe9b1106818540ebce01'
-auth_token = 'f5bdb8d6fbb3d5e8afbfee61b31f30f7'
+account_sid = 'redacted'
+auth_token = 'redacted'
 client = Client(account_sid, auth_token)
 
 
